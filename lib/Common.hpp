@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <random>
 
 constexpr unsigned short SERVER_PORT = 60002;
 constexpr int SOCKET_TYPE = SOCK_STREAM;
