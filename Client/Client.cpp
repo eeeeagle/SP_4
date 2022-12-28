@@ -20,7 +20,7 @@ int main()
     std::cout << "Connected to " << dest_address << std::endl;
 
     std::vector<int> attempt = {};
-    for (int i = -1000; i <= 1000; attempt.push_back(i++));
+    for (int i = -100; i <= 100; attempt.push_back(i++));
     std::random_device rd;
     std::mt19937 mt(rd());
     std::shuffle(attempt.begin(), attempt.end(), mt);

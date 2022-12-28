@@ -26,7 +26,7 @@ int main()
         std::cout << "Connected from " << connected_address << std::endl;
 
         static std::mt19937 gen(HRC::now().time_since_epoch().count());
-        std::uniform_int_distribution<> uid(-1000, 1000);
+        std::uniform_int_distribution<> uid(-100, 100);
         int guessed_value = uid(gen);
         std::cout << "Guessed value = " << guessed_value << std::endl;
 
@@ -39,26 +39,18 @@ int main()
             {
                 int tmp = 1;
 
-                int st = 0;
-                if (waitpid(p, &st, WNOHANG) > 0)
-                {
-                    std::cout << "Terminating..." << std::endl;
-                    tmp = -1;
-                    check(send(connected_socket, &tmp, sizeof(int), MSG_WAITFORONE));
+                int size = recv(connected_socket, buffer, sizeof(buffer), MSG_WAITFORONE);
+                if (size <= 0)
                     break;
-                }
-
-                int size = check(recv(connected_socket, buffer, sizeof(buffer), MSG_WAITFORONE));
-                if (size == 0 || (size < 0 && errno == ENOTCONN))
-                    break; //disconnected
 
                 if (buffer[0] == guessed_value)
                     tmp = -1;
                 else
                     tmp = 0;
-                check(send(connected_socket, &tmp, sizeof(int), MSG_WAITFORONE));
 
-                check(size);
+                if(send(connected_socket, &tmp, sizeof(int), MSG_WAITFORONE) < 0)
+                    break;
+
                 std::cout   << "[proc: " << p << "] ["
                             << connected_address
                             << " send a message of a size " << size
@@ -66,6 +58,8 @@ int main()
 
             }
             std::cout << "Disconnected from " << connected_address << std::endl;
+            exit(0);
         }
+        close(connected_socket);
     }
 }
