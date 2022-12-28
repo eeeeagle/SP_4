@@ -61,7 +61,7 @@ int main()
                 check(size);
                 std::cout   << "[proc: " << p << "] ["
                             << connected_address
-                            << "send a message of a size " << size
+                            << " send a message of a size " << size
                             << "] ---- [" << ++count << "] " << buffer[0] << std::endl;
 
             }
